@@ -13,13 +13,13 @@ private:
 	unsigned short age;
 	unsigned long long bankAccount;
 	unsigned int id;
-	double balance;
+	double balance = 0;
 	Client(string firstName, string secondName, unsigned short age, long long bankAccount) {
 		this->firstName = firstName;
 		this->secondName = secondName;
 		this->age = age;
 		this->balance = 0;
-		id = lastId++;
+		this->id = lastId++;
 		this->bankAccount = bankAccount;
 	}
 
