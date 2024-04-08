@@ -62,6 +62,13 @@ public:
 		cout << "ID: " << this->id << endl;
 	}
 
+	bool operator ==(const Client &cl) {
+		if (this->firstName == cl.firstName &&
+			this->secondName == cl.secondName &&
+			this->age == cl.age)return 1;
+			else return 0;
+	}
+
 };
 unsigned int Client::lastId = 1;
 
@@ -75,21 +82,6 @@ public:
 	Bank(string name) {
 		this->name = name;
 	}
-	void changeBalance(Client bankAccaunt, double value) {
-		char f;
-		cin >> f;
-		if (f == '+') {
-
-		}
-		else if (f == '-') {
-
-		}
-		else {
-			cout << "Return again";
-		}
-	}
-
-
 	void createClient(string firstName, string secondName, unsigned short age) {
 		Client* buf = new Client[size + 1];
 		for (int i = 0; i < size; i++)
@@ -153,17 +145,70 @@ public:
 	}
 
 	void foundByID(int id) {
-		if (id > size || id <= 0) {
+		if (id > size || id <= 0 ) {
 			cout << "ID is difernt";
 		}
 		else {
 			clients[id-1].clientInfo();
 		}
 	}
+
+	void addBalane(unsigned long long ba, int amount) {
+		for (int i = 0; i < size; i++)
+		{ 
+			if (clients[i].bankAccount ==ba)
+			{
+				clients[i].balance += amount;
+			}
+		}
+	}
+	void transaction(unsigned long long sender, unsigned long long reciver, int amount) {
+		int sendInd = -1;
+		int reciInd = -1;
+		for (int i = 0; i < size; i++)
+		{
+			if (clients[i].bankAccount == sender) {
+				if (clients[i].balance >= amount) {
+					sendInd = i;
+				}
+				else {
+					cout << "Not enough money" << endl;
+					return;
+				}
+			}
+		}
+		if (sendInd == -1) {
+			cout << "Sender not found" << endl;
+			return;
+		}
+		for (int i = 0; i < size; i++)
+		{
+			if (clients[i].bankAccount == reciver) {
+				if (clients[i].balance >= amount) {
+					reciInd = i;
+				}
+			}
+			else
+			{
+				cout << "Tacker not found" << endl;
+				return;
+			}
+		}
+		clients[sendInd].balance -= amount;
+		clients[reciInd].balance += amount;
+		cout << "Transaction complited" << endl;
+	}
+	void operator =(Bank& bk) {
+		bk.name = this->name; 
+		bk.clients = this->clients; 
+		bk.size = this->size;
+	}
 };
 
 int main()
 {
+
+
 	srand(time(NULL));
 	Bank bk1("Hitbank");
 	for (int i = 0; i < 20; i++)
